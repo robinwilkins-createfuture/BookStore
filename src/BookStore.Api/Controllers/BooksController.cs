@@ -19,18 +19,18 @@ public class BooksController : ControllerBase
 
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<BookDto>), StatusCodes.Status200OK)]
-    public ActionResult<IEnumerable<BookDto>> GetBooks()
+    public async Task<ActionResult<IEnumerable<BookDto>>> GetBooks(CancellationToken cancellationToken = default)
     {
-        var books = _bookService.GetBooks().Select(MapToDto);
-        return Ok(books);
+        var books = await _bookService.GetBooksAsync(cancellationToken);
+        return Ok(books.Select(MapToDto));
     }
 
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(BookDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<BookDto> GetBook(int id)
+    public async Task<ActionResult<BookDto>> GetBook(int id, CancellationToken cancellationToken = default)
     {
-        var book = _bookService.GetBook(id);
+        var book = await _bookService.GetBookAsync(id, cancellationToken);
         if (book == null)
         {
             return NotFound();
@@ -42,14 +42,14 @@ public class BooksController : ControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(BookDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public ActionResult<BookDto> CreateBook(BookDto book)
+    public async Task<ActionResult<BookDto>> CreateBook(BookDto book, CancellationToken cancellationToken = default)
     {
         if (book == null)
         {
             return BadRequest();
         }
 
-        var createdBook = _bookService.CreateBook(MapToModel(book));
+        var createdBook = await _bookService.CreateBookAsync(MapToModel(book), cancellationToken);
         var createdBookDto = MapToDto(createdBook);
 
         return CreatedAtAction(nameof(GetBook), new { id = createdBookDto.Id }, createdBookDto);
@@ -58,9 +58,9 @@ public class BooksController : ControllerBase
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult UpdateBook(int id, BookDto updatedBook)
+    public async Task<ActionResult> UpdateBook(int id, BookDto updatedBook, CancellationToken cancellationToken = default)
     {
-        var updated = _bookService.UpdateBook(id, MapToModel(updatedBook));
+        var updated = await _bookService.UpdateBookAsync(id, MapToModel(updatedBook), cancellationToken);
         if (!updated)
         {
             return NotFound();

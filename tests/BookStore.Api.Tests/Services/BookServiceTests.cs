@@ -28,22 +28,22 @@ public class BookServiceTests
     }
 
     [Fact]
-    public void GetBooks_ReturnsSeededBooks()
+    public async Task GetBooks_ReturnsSeededBooks()
     {
         var service = CreateService(nameof(GetBooks_ReturnsSeededBooks));
 
-        var books = service.GetBooks();
+        var books = await service.GetBooksAsync();
 
         Assert.NotNull(books);
         Assert.Equal(4, books.Count);
     }
 
     [Fact]
-    public void GetBook_WithValidId_ReturnsBook()
+    public async Task GetBook_WithValidId_ReturnsBook()
     {
         var service = CreateService(nameof(GetBook_WithValidId_ReturnsBook));
 
-        var book = service.GetBook(1);
+        var book = await service.GetBookAsync(1);
 
         Assert.NotNull(book);
         Assert.Equal(1, book!.Id);
@@ -53,50 +53,52 @@ public class BookServiceTests
     }
 
     [Fact]
-    public void GetBook_WithInvalidId_ReturnsNull()
+    public async Task GetBook_WithInvalidId_ReturnsNull()
     {
         var service = CreateService(nameof(GetBook_WithInvalidId_ReturnsNull));
 
-        var book = service.GetBook(999);
+        var book = await service.GetBookAsync(999);
 
         Assert.Null(book);
     }
 
     [Fact]
-    public void CreateBook_AssignsNextId_AndAddsBook()
+    public async Task CreateBook_AssignsNextId_AndAddsBook()
     {
         var service = CreateService(nameof(CreateBook_AssignsNextId_AndAddsBook));
         var newBook = new Book
         {
-            Id = 999, // This should be ignored by the service and overwritten with the next available ID
+            Id = 999,
             Title = "Refactoring",
             Author = "Martin Fowler",
             YearPublished = 1999
         };
 
-        var createdBook = service.CreateBook(newBook);
+        var createdBook = await service.CreateBookAsync(newBook);
 
         Assert.Equal(5, createdBook.Id);
-        Assert.Equal(5, service.GetBooks().Count);
-        Assert.Equal("Refactoring", service.GetBook(5)!.Title);
+        var allBooks = await service.GetBooksAsync();
+        Assert.Equal(5, allBooks.Count);
+        var retrievedBook = await service.GetBookAsync(5);
+        Assert.Equal("Refactoring", retrievedBook!.Title);
     }
 
     [Fact]
-    public void UpdateBook_WithValidId_UpdatesAndReturnsTrue()
+    public async Task UpdateBook_WithValidId_UpdatesAndReturnsTrue()
     {
         var service = CreateService(nameof(UpdateBook_WithValidId_UpdatesAndReturnsTrue));
         var updatedBook = new Book
         {
-            Id = 10, // Id is not used in the update, it should be ignored
+            Id = 10,
             Title = "The Pragmatic Programmer 20th Anniversary Edition",
             Author = "Andrew Hunt and David Thomas",
             YearPublished = 2019
         };
 
-        var updated = service.UpdateBook(1, updatedBook);
+        var updated = await service.UpdateBookAsync(1, updatedBook);
 
         Assert.True(updated);
-        var book = service.GetBook(1);
+        var book = await service.GetBookAsync(1);
         Assert.NotNull(book);
         Assert.Equal(updatedBook.Title, book!.Title);
         Assert.Equal(updatedBook.Author, book.Author);
@@ -104,18 +106,18 @@ public class BookServiceTests
     }
 
     [Fact]
-    public void UpdateBook_WithInvalidId_ReturnsFalse()
+    public async Task UpdateBook_WithInvalidId_ReturnsFalse()
     {
         var service = CreateService(nameof(UpdateBook_WithInvalidId_ReturnsFalse));
         var updatedBook = new Book
         {
-            Id = 10, // Id is not used in the update, it should be ignored
+            Id = 10,
             Title = "Does Not Matter",
             Author = "Unknown",
             YearPublished = 2026
         };
 
-        var updated = service.UpdateBook(999, updatedBook);
+        var updated = await service.UpdateBookAsync(999, updatedBook);
 
         Assert.False(updated);
     }

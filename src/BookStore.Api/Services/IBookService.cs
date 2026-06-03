@@ -4,8 +4,8 @@ namespace BookStore.Api.Services;
 
 public interface IBookService
 {
-    IReadOnlyList<Book> GetBooks();
-    Book? GetBook(int id);
-    Book CreateBook(Book book);
-    bool UpdateBook(int id, Book updatedBook);
+    Task<IReadOnlyList<Book>> GetBooksAsync(CancellationToken cancellationToken = default);
+    Task<Book?> GetBookAsync(int id, CancellationToken cancellationToken = default);
+    Task<Book> CreateBookAsync(Book book, CancellationToken cancellationToken = default);
+    Task<bool> UpdateBookAsync(int id, Book updatedBook, CancellationToken cancellationToken = default);
 }
