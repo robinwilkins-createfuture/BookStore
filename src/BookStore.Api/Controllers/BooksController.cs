@@ -1,3 +1,4 @@
+using BookStore.Api.Dtos;
 using BookStore.Api.Models;
 using BookStore.Api.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -17,45 +18,49 @@ public class BooksController : ControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<Book>), StatusCodes.Status200OK)]
-    public ActionResult<IEnumerable<Book>> GetBooks()
+    [ProducesResponseType(typeof(IEnumerable<BookDto>), StatusCodes.Status200OK)]
+    public ActionResult<IEnumerable<BookDto>> GetBooks()
     {
-        return Ok(_bookService.GetBooks());
+        var books = _bookService.GetBooks().Select(MapToDto);
+        return Ok(books);
     }
 
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(Book), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(BookDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<Book> GetBook(int id)
+    public ActionResult<BookDto> GetBook(int id)
     {
         var book = _bookService.GetBook(id);
         if (book == null)
         {
             return NotFound();
         }
-        return Ok(book);
+
+        return Ok(MapToDto(book));
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(Book), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(BookDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public ActionResult<Book> CreateBook(Book book)
+    public ActionResult<BookDto> CreateBook(BookDto book)
     {
         if (book == null)
         {
             return BadRequest();
         }
 
-        var createdBook = _bookService.CreateBook(book);
-        return CreatedAtAction(nameof(GetBook), new { id = createdBook.Id }, createdBook);
+        var createdBook = _bookService.CreateBook(MapToModel(book));
+        var createdBookDto = MapToDto(createdBook);
+
+        return CreatedAtAction(nameof(GetBook), new { id = createdBookDto.Id }, createdBookDto);
     }
 
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult UpdateBook(int id, Book updatedBook)
+    public ActionResult UpdateBook(int id, BookDto updatedBook)
     {
-        var updated = _bookService.UpdateBook(id, updatedBook);
+        var updated = _bookService.UpdateBook(id, MapToModel(updatedBook));
         if (!updated)
         {
             return NotFound();
@@ -63,4 +68,20 @@ public class BooksController : ControllerBase
 
         return NoContent();
     }
+
+    private static BookDto MapToDto(Book book) => new()
+    {
+        Id = book.Id,
+        Title = book.Title,
+        Author = book.Author,
+        YearPublished = book.YearPublished
+    };
+
+    private static Book MapToModel(BookDto bookDto) => new()
+    {
+        Id = bookDto.Id,
+        Title = bookDto.Title,
+        Author = bookDto.Author,
+        YearPublished = bookDto.YearPublished
+    };
 }

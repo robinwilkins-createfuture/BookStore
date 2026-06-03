@@ -1,4 +1,5 @@
 using BookStore.Api.Controllers;
+using BookStore.Api.Dtos;
 using BookStore.Api.Models;
 using BookStore.Api.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -47,7 +48,7 @@ public class BooksControllerTests
         var result = _controller.GetBooks();
 
         var okResult = Assert.IsType<OkObjectResult>(result.Result);
-        var books = Assert.IsAssignableFrom<IEnumerable<Book>>(okResult.Value);
+        var books = Assert.IsAssignableFrom<IEnumerable<BookDto>>(okResult.Value);
         Assert.NotEmpty(books);
         Assert.Equal(2, books.Count());
         _bookServiceMock.Verify(service => service.GetBooks(), Times.Once);
@@ -84,7 +85,7 @@ public class BooksControllerTests
         var result = _controller.GetBook(1);
 
         var okResult = Assert.IsType<OkObjectResult>(result.Result);
-        var book = Assert.IsType<Book>(okResult.Value);
+        var book = Assert.IsType<BookDto>(okResult.Value);
         Assert.Equal(1, book.Id);
         Assert.Equal("The Pragmatic Programmer", book.Title);
         Assert.Equal("Andrew Hunt", book.Author);
