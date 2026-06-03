@@ -68,7 +68,6 @@ public class BookService : IBookService
 
     private static BookEntity MapToEntity(Book model) => new()
     {
-        Id = model.Id,
         Title = model.Title,
         Author = model.Author,
         YearPublished = model.YearPublished

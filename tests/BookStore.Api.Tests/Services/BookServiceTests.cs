@@ -68,6 +68,7 @@ public class BookServiceTests
         var service = CreateService(nameof(CreateBook_AssignsNextId_AndAddsBook));
         var newBook = new Book
         {
+            Id = 999, // This should be ignored by the service and overwritten with the next available ID
             Title = "Refactoring",
             Author = "Martin Fowler",
             YearPublished = 1999
@@ -86,6 +87,7 @@ public class BookServiceTests
         var service = CreateService(nameof(UpdateBook_WithValidId_UpdatesAndReturnsTrue));
         var updatedBook = new Book
         {
+            Id = 10, // Id is not used in the update, it should be ignored
             Title = "The Pragmatic Programmer 20th Anniversary Edition",
             Author = "Andrew Hunt and David Thomas",
             YearPublished = 2019
@@ -107,6 +109,7 @@ public class BookServiceTests
         var service = CreateService(nameof(UpdateBook_WithInvalidId_ReturnsFalse));
         var updatedBook = new Book
         {
+            Id = 10, // Id is not used in the update, it should be ignored
             Title = "Does Not Matter",
             Author = "Unknown",
             YearPublished = 2026
