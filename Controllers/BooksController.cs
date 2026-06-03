@@ -20,4 +20,41 @@ public class BooksController : ControllerBase
     {
         return Ok(books);
     }
+
+    [HttpGet("{id}")]
+    public ActionResult<Book> GetBook(int id)
+    {
+        var book = books.FirstOrDefault(b => b.Id == id);
+        if (book == null)
+        {
+            return NotFound();
+        }
+        return Ok(book);
+    }
+
+    [HttpPost]
+    public ActionResult<Book> CreateBook(Book book)
+    {
+        if (book == null)
+        {
+            return BadRequest();
+        }
+        book.Id = books.Max(b => b.Id) + 1;
+        books.Add(book);
+        return CreatedAtAction(nameof(GetBook), new { id = book.Id }, book);
+    }
+
+    [HttpPut("{id}")]
+    public ActionResult UpdateBook(int id, Book updatedBook)
+    {        
+        var book = books.FirstOrDefault(b => b.Id == id);
+        if (book == null)
+        {
+            return NotFound();
+        }
+        book.Title = updatedBook.Title;
+        book.Author = updatedBook.Author;
+        book.YearPublished = updatedBook.YearPublished;
+        return NoContent();
+    }
 }

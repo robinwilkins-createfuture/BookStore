@@ -4,3 +4,35 @@ GET {{book_store_HostAddress}}/api/books/
 Accept: application/json
 
 ###
+
+GET {{book_store_HostAddress}}/api/books/7
+Accept: application/json
+
+###
+
+POST  {{book_store_HostAddress}}/api/books
+Accept: application/json
+Content-Type: application/json
+
+{
+  "title": "The Great Gatsby",
+  "author": "F. Scott Fitzgerald",
+  "yearPublished": 1925,
+  "isbn": "978-0743273565"
+}
+
+###
+
+PUT  {{book_store_HostAddress}}/api/books/5
+Accept: application/json
+Content-Type: application/json
+
+{
+  "id": 5,
+  "title": "The Great Gatsby (Updated Edition)",
+  "author": "F. Scott Fitzgerald",
+  "yearPublished": 1930,
+  "isbn": "978-0743273565"
+}
+
+###
