@@ -25,6 +25,23 @@ A RESTful Web API built with ASP.NET Core 9 for managing a collection of books.
 ## Requirements
 
 - [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (for PostgreSQL when running with Aspire)
+
+## Running with Aspire (API + PostgreSQL)
+
+Run the AppHost project to start the API and a PostgreSQL container together:
+
+```bash
+dotnet run --project src/BookStore.AppHost
+```
+
+or using http only:
+
+```bash
+dotnet run --project src/BookStore.AppHost --launch-profile http
+```
+
+Aspire injects a connection string named `booksdb` into services that reference the database.
 
 ## Running the API
 
