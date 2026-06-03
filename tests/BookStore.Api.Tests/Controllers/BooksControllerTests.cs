@@ -1,9 +1,9 @@
-using book_store.Controllers;
-using book_store.Models;
+using BookStore.Api.Controllers;
+using BookStore.Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Xunit;
 
-namespace book_store.Tests.Controllers;
+namespace BookStore.Api.Tests.Controllers;
 
 public class BooksControllerTests
 {

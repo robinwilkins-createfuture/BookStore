@@ -50,7 +50,7 @@ The Scalar UI lets you browse all endpoints, view request/response schemas, and 
 ## Running the tests
 
 ```bash
-dotnet test book-store.Tests/book-store.Tests.csproj
+dotnet test tests/BookStore.Api.Tests/BookStore.Api.Tests.csproj
 ```
 
 ## CI

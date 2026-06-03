@@ -22,7 +22,7 @@ jobs:
         run: dotnet restore
 
       - name: Build
-        run: dotnet build --no-restore --configuration Release
+        run: dotnet build BookStore.sln --no-restore --configuration Release
 
       - name: Test
-        run: dotnet test book-store.Tests/book-store.Tests.csproj --no-build --configuration Release --verbosity normal
+        run: dotnet test tests/BookStore.Api.Tests/BookStore.Api.Tests.csproj --no-build --configuration Release --verbosity normal

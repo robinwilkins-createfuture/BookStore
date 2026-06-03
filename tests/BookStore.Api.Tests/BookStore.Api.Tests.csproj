@@ -4,6 +4,8 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>BookStore.Api.Tests</RootNamespace>
+    <AssemblyName>BookStore.Api.Tests</AssemblyName>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
@@ -18,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../book-store.csproj" />
+    <ProjectReference Include="../../src/BookStore.Api/BookStore.Api.csproj" />
   </ItemGroup>
 
 </Project>

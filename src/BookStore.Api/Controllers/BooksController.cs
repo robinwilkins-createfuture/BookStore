@@ -1,7 +1,7 @@
-using book_store.Models;
+using BookStore.Api.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace book_store.Controllers;
+namespace BookStore.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -54,7 +54,7 @@ public class BooksController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult UpdateBook(int id, Book updatedBook)
-    {        
+    {
         var book = books.FirstOrDefault(b => b.Id == id);
         if (book == null)
         {

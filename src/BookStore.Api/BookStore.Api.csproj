@@ -4,7 +4,8 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>book-store</RootNamespace>
+    <RootNamespace>BookStore.Api</RootNamespace>
+    <AssemblyName>BookStore.Api</AssemblyName>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
@@ -12,10 +13,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.16" />
     <PackageReference Include="Scalar.AspNetCore" Version="2.14.14" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="book-store.Tests/**" />
   </ItemGroup>
 
 </Project>
