@@ -1,15 +1,36 @@
+using BookStore.Api.Data;
+using BookStore.Api.Data.Entities;
 using BookStore.Api.Models;
 using BookStore.Api.Services;
+using Microsoft.EntityFrameworkCore;
 using Xunit;
 
 namespace BookStore.Api.Tests.Services;
 
 public class BookServiceTests
 {
+    private static BookService CreateService(string dbName)
+    {
+        var options = new DbContextOptionsBuilder<BookStoreDbContext>()
+            .UseInMemoryDatabase(dbName)
+            .Options;
+
+        var context = new BookStoreDbContext(options);
+        context.Books.AddRange(
+            new BookEntity { Id = 1, Title = "The Pragmatic Programmer", Author = "Andrew Hunt", YearPublished = 1999 },
+            new BookEntity { Id = 2, Title = "Clean Code", Author = "Robert C. Martin", YearPublished = 2008 },
+            new BookEntity { Id = 3, Title = "Domain-Driven Design", Author = "Eric Evans", YearPublished = 2003 },
+            new BookEntity { Id = 4, Title = "Lord of the Rings", Author = "J.R.R. Tolkien", YearPublished = 1954 }
+        );
+        context.SaveChanges();
+
+        return new BookService(context);
+    }
+
     [Fact]
     public void GetBooks_ReturnsSeededBooks()
     {
-        var service = new BookService();
+        var service = CreateService(nameof(GetBooks_ReturnsSeededBooks));
 
         var books = service.GetBooks();
 
@@ -20,7 +41,7 @@ public class BookServiceTests
     [Fact]
     public void GetBook_WithValidId_ReturnsBook()
     {
-        var service = new BookService();
+        var service = CreateService(nameof(GetBook_WithValidId_ReturnsBook));
 
         var book = service.GetBook(1);
 
@@ -34,7 +55,7 @@ public class BookServiceTests
     [Fact]
     public void GetBook_WithInvalidId_ReturnsNull()
     {
-        var service = new BookService();
+        var service = CreateService(nameof(GetBook_WithInvalidId_ReturnsNull));
 
         var book = service.GetBook(999);
 
@@ -44,7 +65,7 @@ public class BookServiceTests
     [Fact]
     public void CreateBook_AssignsNextId_AndAddsBook()
     {
-        var service = new BookService();
+        var service = CreateService(nameof(CreateBook_AssignsNextId_AndAddsBook));
         var newBook = new Book
         {
             Title = "Refactoring",
@@ -62,7 +83,7 @@ public class BookServiceTests
     [Fact]
     public void UpdateBook_WithValidId_UpdatesAndReturnsTrue()
     {
-        var service = new BookService();
+        var service = CreateService(nameof(UpdateBook_WithValidId_UpdatesAndReturnsTrue));
         var updatedBook = new Book
         {
             Title = "The Pragmatic Programmer 20th Anniversary Edition",
@@ -83,7 +104,7 @@ public class BookServiceTests
     [Fact]
     public void UpdateBook_WithInvalidId_ReturnsFalse()
     {
-        var service = new BookService();
+        var service = CreateService(nameof(UpdateBook_WithInvalidId_ReturnsFalse));
         var updatedBook = new Book
         {
             Title = "Does Not Matter",
