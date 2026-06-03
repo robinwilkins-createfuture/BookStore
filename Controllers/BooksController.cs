@@ -1,7 +1,7 @@
-using demo_web_api.Models;
+using book_store.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace demo_web_api.Controllers;
+namespace book_store.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

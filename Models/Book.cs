@@ -1,4 +1,4 @@
-namespace demo_web_api.Models;
+namespace book_store.Models;
 
 public class Book
 {

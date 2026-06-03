@@ -4,7 +4,7 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>demo_web_api</RootNamespace>
+    <RootNamespace>book-store</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
