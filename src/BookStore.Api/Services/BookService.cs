@@ -14,36 +14,37 @@ public class BookService : IBookService
         _dbContext = dbContext;
     }
 
-    public IReadOnlyList<Book> GetBooks()
+    public async Task<IReadOnlyList<Book>> GetBooksAsync(CancellationToken cancellationToken = default)
     {
-        return _dbContext.Books
+        var entities = await _dbContext.Books
             .AsNoTracking()
             .OrderBy(b => b.Id)
-            .Select(MapToModel)
-            .ToList();
+            .ToListAsync(cancellationToken);
+
+        return entities.Select(MapToModel).ToList();
     }
 
-    public Book? GetBook(int id)
+    public async Task<Book?> GetBookAsync(int id, CancellationToken cancellationToken = default)
     {
-        return _dbContext.Books
+        var entity = await _dbContext.Books
             .AsNoTracking()
-            .Where(b => b.Id == id)
-            .Select(MapToModel)
-            .FirstOrDefault();
+            .FirstOrDefaultAsync(b => b.Id == id, cancellationToken);
+
+        return entity == null ? null : MapToModel(entity);
     }
 
-    public Book CreateBook(Book book)
+    public async Task<Book> CreateBookAsync(Book book, CancellationToken cancellationToken = default)
     {
         var bookEntity = MapToEntity(book);
         _dbContext.Books.Add(bookEntity);
-        _dbContext.SaveChanges();
+        await _dbContext.SaveChangesAsync(cancellationToken);
 
         return MapToModel(bookEntity);
     }
 
-    public bool UpdateBook(int id, Book updatedBook)
+    public async Task<bool> UpdateBookAsync(int id, Book updatedBook, CancellationToken cancellationToken = default)
     {
-        var bookEntity = _dbContext.Books.FirstOrDefault(b => b.Id == id);
+        var bookEntity = await _dbContext.Books.FirstOrDefaultAsync(b => b.Id == id, cancellationToken);
         if (bookEntity == null)
         {
             return false;
@@ -53,7 +54,7 @@ public class BookService : IBookService
         bookEntity.Author = updatedBook.Author;
         bookEntity.YearPublished = updatedBook.YearPublished;
 
-        _dbContext.SaveChanges();
+        await _dbContext.SaveChangesAsync(cancellationToken);
 
         return true;
     }
