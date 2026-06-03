@@ -12,19 +12,37 @@ public class BookService : IBookService
         new() { Id = 4, Title = "Lord of the Rings", Author = "J.R.R. Tolkien", YearPublished = 1954 }
     ];
 
-    public IReadOnlyList<Book> GetBooks() => _books;
-
-    public Book? GetBook(int id) => _books.FirstOrDefault(b => b.Id == id);
-
-    public Book CreateBook(Book book)
+public IReadOnlyList<Book> GetBooks()
+{
+    lock (_books)
     {
-        book.Id = _books.Max(b => b.Id) + 1;
+        return _books.ToArray();
+    }
+}
+
+public Book? GetBook(int id)
+{
+    lock (_books)
+    {
+        return _books.FirstOrDefault(b => b.Id == id);
+    }
+}
+
+public Book CreateBook(Book book)
+{
+    lock (_books)
+    {
+        var nextId = _books.Count == 0 ? 1 : _books.Max(b => b.Id) + 1;
+        book.Id = nextId;
         _books.Add(book);
 
         return book;
     }
+}
 
-    public bool UpdateBook(int id, Book updatedBook)
+public bool UpdateBook(int id, Book updatedBook)
+{
+    lock (_books)
     {
         var book = _books.FirstOrDefault(b => b.Id == id);
         if (book is null)
@@ -38,4 +56,5 @@ public class BookService : IBookService
 
         return true;
     }
+}
 }
