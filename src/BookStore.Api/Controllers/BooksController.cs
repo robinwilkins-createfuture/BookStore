@@ -79,7 +79,6 @@ public class BooksController : ControllerBase
 
     private static Book MapToModel(BookDto bookDto) => new()
     {
-        Id = bookDto.Id,
         Title = bookDto.Title,
         Author = bookDto.Author,
         YearPublished = bookDto.YearPublished
