@@ -11,4 +11,8 @@
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.16" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="book-store.Tests/**" />
+  </ItemGroup>
+
 </Project>
