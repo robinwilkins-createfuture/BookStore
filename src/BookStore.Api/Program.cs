@@ -1,10 +1,12 @@
 using Scalar.AspNetCore;
+using BookStore.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.AddServiceDefaults();
+builder.Services.AddSingleton<IBookService, BookService>();
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
