@@ -21,6 +21,7 @@ var connectionString = builder.Configuration.GetConnectionString("booksdb")
 builder.Services.AddDbContext<BookStoreDbContext>(options =>
     options.UseNpgsql(connectionString));
 builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
