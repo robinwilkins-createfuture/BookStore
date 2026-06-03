@@ -32,9 +32,20 @@ A RESTful Web API built with ASP.NET Core 9 for managing a collection of books.
 dotnet run
 ```
 
-The API will be available at `https://localhost:5001` (or `http://localhost:5000`).
+The API will be available at `https://localhost:5001` (or `http://localhost:5299`).
 
 An OpenAPI document is served at `/openapi/v1.json` when running in Development mode.
+
+## API Documentation
+
+Interactive API documentation is available via [Scalar](https://scalar.com/) when the application is running in Development mode.
+
+| Resource | URL |
+|----------|-----|
+| OpenAPI JSON spec | `http://localhost:5299/openapi/v1.json` |
+| Scalar UI | `http://localhost:5299/scalar/v1` |
+
+The Scalar UI lets you browse all endpoints, view request/response schemas, and execute requests directly from the browser.
 
 ## Running the tests
 

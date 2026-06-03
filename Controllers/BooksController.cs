@@ -5,6 +5,7 @@ namespace book_store.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Produces("application/json")]
 public class BooksController : ControllerBase
 {
     static private List<Book> books = new List<Book>
@@ -16,12 +17,15 @@ public class BooksController : ControllerBase
     };
 
     [HttpGet]
+    [ProducesResponseType(typeof(IEnumerable<Book>), StatusCodes.Status200OK)]
     public ActionResult<IEnumerable<Book>> GetBooks()
     {
         return Ok(books);
     }
 
     [HttpGet("{id}")]
+    [ProducesResponseType(typeof(Book), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult<Book> GetBook(int id)
     {
         var book = books.FirstOrDefault(b => b.Id == id);
@@ -33,6 +37,8 @@ public class BooksController : ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(typeof(Book), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public ActionResult<Book> CreateBook(Book book)
     {
         if (book == null)
@@ -45,6 +51,8 @@ public class BooksController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult UpdateBook(int id, Book updatedBook)
     {        
         var book = books.FirstOrDefault(b => b.Id == id);
