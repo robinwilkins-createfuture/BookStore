@@ -1,12 +1,26 @@
 using Scalar.AspNetCore;
+using BookStore.Api.Configuration;
+using BookStore.Api.Data;
 using BookStore.Api.Services;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.AddServiceDefaults();
-builder.Services.AddSingleton<IBookService, BookService>();
+var databaseSettings = builder.Configuration
+    .GetSection(DatabaseSettings.SectionName)
+    .Get<DatabaseSettings>()
+    ?? new DatabaseSettings();
+
+var connectionString = builder.Configuration.GetConnectionString("booksdb")
+    ?? builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? databaseSettings.ToConnectionString();
+
+builder.Services.AddDbContext<BookStoreDbContext>(options =>
+    options.UseNpgsql(connectionString));
+builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
@@ -23,5 +37,7 @@ app.UseHttpsRedirection();
 
 app.MapControllers();
 app.MapDefaultEndpoints();
+
+DatabaseInitializer.Initialize(app);
 
 app.Run();
